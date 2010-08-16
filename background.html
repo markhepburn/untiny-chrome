@@ -1,0 +1,66 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var service_endpoint = 'http://untiny.ws/api/1.0/';
+
+      // load supported services:
+      var services;
+
+      /**
+       * Perform the XHR request to resolve shortened URLs.
+       */
+      function untinyURL(tiny_url, callback) {
+        var url = service_endpoint + 'extract?url=' + tiny_url +'&format=text';
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            callback(xhr.responseText);
+          }
+        };
+        xhr.send();
+      }
+
+      /**
+       * Retrieve the list of supported services for the client page:
+       */
+      function getSupportedServices(callback) {
+        if (!services) {
+          var services_url = service_endpoint + 'services?format=json';
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", services_url, true);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              services = JSON.parse(xhr.responseText);
+              callback(services);
+            }
+          };
+          xhr.send();
+        }
+        else {
+          callback(services);
+        }
+      }
+
+      /**
+       * The dispatch method for data sent by chrome.extension.sendRequest()
+       * @param request Object Data sent in the request.
+       * @param sender Object Origin of the request.
+       * @param callback Function The method to call when the request completes.
+       */
+      function onRequest(request, sender, callback) {
+        if (request.action == 'getSupportedServices') {
+          getSupportedServices(callback);
+        }
+        else if (request.action == 'untinyURL') {
+          untinyURL(request.old_url, callback);
+        }
+      }
+
+      // Wire up the listener.
+      chrome.extension.onRequest.addListener(onRequest);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "UnTiny Chrome Extension",
+  "version": "1.0",
+  "description": "Add an icon linked to the original URL for all recognised shortened URLs on the page.",
+  "background_page" : "background.html",
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["untiny.user.js"],
+      "css": ["untiny.css"]
+    }
+  ],
+  "permissions": [
+    "http://untiny.ws/"
+  ]
+}
