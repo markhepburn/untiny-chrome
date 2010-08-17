@@ -25,7 +25,7 @@
 // security risk).
 
 function convertLinks(services) {
-  var untinyIconURL = chrome.extension.getURL('untiny.png');
+  var untinyIconURL = chrome.extension.getURL('icons/untiny.png');
 
   links = document.evaluate(
     '//a[@href]',
