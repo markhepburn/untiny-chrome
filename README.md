@@ -2,29 +2,42 @@ Untiny.ws
 =========
 
 [Untiny.ws](http://untiny.ws) is a service that expands a huge number
-(164, at time of writing!) of URLs as shortened by bit.ly, is.gd, etc.
+(233, at time of writing!) of URLs as shortened by bit.ly, is.gd, etc.
 It's a very clean, tidy, and performant site --- you should check it
 out.
 
-Greasemonkey
-============
+Chrome Extensions
+=================
 
 The site also offers an API, and there are a few add-ons that take
 advantage of this such as firefox plugins and native apps, listed
-[here](http://untiny.ws/extra/).  One of these, fairly naturally, is a
-greasemonkey script.
+[here](http://untiny.ws/extra/).  There is an extension for Chrome,
+but it requires you to manually enter the URL to be expanded into a
+popup.  There is a greasemonkey script for firefox which transparently
+expands and replaces shortened URLs inline, and a port of this with
+slightly different behaviour (the original text is left intact, with
+an icon with the expanded URL inserted) and dramatically improved
+performance can be found
+[here](http://github.com/markhepburn/untiny-greasemonkey).
 
-Alterations
-===========
+Chrome can run greasemonkey scripts as extensions, with just a few
+restrictions.  Unfortunately, one of those restrictions is on making
+cross-site AJAX requests, which untiny of course relies on.
 
-This project is just a few custom alterations to this script.  The
-original behaviour was to insert an icon after each shortened link it
-found in the page, while it was processing, then when the link was
-expanded it would be replaced with the original URL and the icon
-removed.  There are two things I wanted to change about this:
+This extension then is a port of that modified greasemonkey script to
+a Chrome extension, which circumvents that restriction.  There are
+also plans to add a few features, such as the option to choose between
+the current behaviour of inserting a link next to the original text,
+and replacing the original link with the expanded text.
 
-* I wanted the text as the author had written it to remain, but to keep the icon in place as a link with hovertext, so you could additionally see the ultimate destination and decide whether or which to click.
-* The original code retrieved the list of supported services as JSON and called eval() to parse it, which is a potential security risk. Firefox 3.5 supports JSON parsing natively, so I use that instead (you could also do something like add a script tag pulling in eg <http://www.json.org/json_parse.js>, wait for it to load, then use that --- but I don't care enough at this stage!)
+TODO
+====
 
-I've also added bit.ly as an excluded site, because I do actually use
-that, but you can do whatever you want of course.
+ * Filter pages the script runs on (for example, skip bit.ly itself).
+   The docs imply that this can't be done in the extension manifest,
+   which seems a bit odd.
+ * Add alternative behaviour to replace the original text.
+ * Add a preferences page, with (at least) options to select the
+   replacement behaviour, and specify the list of pages to ignore.
+   Hopefully this can be accessed from the extensions page, since I
+   don't want to add a browser_action icon (unnecessary clutter).
