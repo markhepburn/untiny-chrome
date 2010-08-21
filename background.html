@@ -29,9 +29,10 @@
             continue;
           try {
             filterRE = new RegExp(filterRE, 'i');
-            if (filterRE.test(url))
+            if (filterRE.test(url)) {
               callback(true);
-            return;
+              return;
+            }
           }
           catch (e) {
             // ignore any exception, just keep looping

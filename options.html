@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Untiny Options</title>
+    <script type="text/javascript">
+      function initOptions() {
+        var savedREs = localStorage['filters'] || '';
+        // REs are saved as a space-separated string; turn into new-line separated:
+        savedREs = savedREs.split(' ');
+        savedREs = savedREs.join('\n');
+        var reLst = document.getElementById('optionsRegexps');
+        reLst.value = savedREs;
+      }
+
+      function saveOptions() {
+        var reLstElt = document.getElementById('optionsRegexps');
+        var reLst = reLstElt.value;
+        localStorage['filters'] = reLst.replace(/\s+/g, ' ');
+      }
+    </script>
+  </head>
+  <body onload="initOptions()">
+    <h1>Untiny Options</h1>
+
+    <span>Filter Regular Expressions:</span>
+    <textarea id="optionsRegexps" rows="10" cols="80"></textarea>
+    <button type="Button" onclick="saveOptions()">Save</button>
+  </body>
+</html>

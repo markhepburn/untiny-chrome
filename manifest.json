@@ -6,6 +6,7 @@
              "48": "icons/untiny-48x48.png",
             "128": "icons/untiny-128x128.png" },
   "background_page" : "background.html",
+  "options_page": "options.html",
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
