@@ -33,11 +33,11 @@ and replacing the original link with the expanded text.
 TODO
 ====
 
- * Filter pages the script runs on (for example, skip bit.ly itself).
+ * [DONE] Filter pages the script runs on (for example, skip bit.ly itself).
    The docs imply that this can't be done in the extension manifest,
    which seems a bit odd.
  * Add alternative behaviour to replace the original text.
- * Add a preferences page, with (at least) options to select the
+ * [DONE] Add a preferences page, with (at least) options to select the
    replacement behaviour, and specify the list of pages to ignore.
    Hopefully this can be accessed from the extensions page, since I
    don't want to add a browser_action icon (unnecessary clutter).
