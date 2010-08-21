@@ -71,7 +71,15 @@ function convertLinks(services) {
   }
 }
 
-// Kick everything off; delegate to the background html to get the list of
-// supported services, then convertLinks is the callback which expands all
-// supported urls:
-chrome.extension.sendRequest({'action':'getSupportedServices'}, convertLinks);
+
+// Kick everything off; delegate to the background html to first check if
+// the current page is ignored, and if not get the list of supported
+// services; convertLinks is the callback which expands all supported urls:
+chrome.extension.sendRequest({'action':'checkIfFiltered',
+                              'url'   : window.location.href},
+  function(isFiltered) {
+    if (!isFiltered)
+      chrome.extension.sendRequest({'action':'getSupportedServices'},
+                                   convertLinks);
+  }
+);
