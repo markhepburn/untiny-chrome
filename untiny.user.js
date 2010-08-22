@@ -9,27 +9,15 @@
 // License:
 // Released under the Creative Commons Attribution-No v3.0 license
 // http://creativecommons.org/licenses/by-nd/3.0/
-//
-// Description:
-// Untiny GreaseMonkey Script is a greasemonkey
-// script of UnTiny Servive (http://untiny.me)
-// to extract the original urls from tiny one
-// like tinyurl.com, tiny.pl  and many others.
-//
-// The original script would change the tiny urls links directly to
-// the original links.  This version simply displays an icon with the
-// original link, so you can preview it and decide which/whether to
-// click, without altering the author's text too much.  Additionally,
-// if you are using firefox 3.5 or greater, it will use the native
-// support for JSON parsing instead of calling eval() (avoiding a
-// security risk).
+
+////////////////////////////////////////////////////////////////////////////////
 
 // Behaviours: what happens when the url has been expanded (for now we always
 // begin by inserting an icon after the link we are expanding).  Each behaviour
 // implementation should take the original link and the new URL.
 
 function behaviourUpdateIcon(link, newurl) {
-  // We know that the icon+link to update is the immediate sibling of the link.
+  // We know that the icon+link to update is the immediate sibling of the link:
   var icon_link = link.nextSibling;
   var icon = icon_link.firstChild;
   icon.setAttribute('title', newurl);
@@ -37,7 +25,7 @@ function behaviourUpdateIcon(link, newurl) {
 }
 
 function behaviourUpdateOriginalLink(link, newurl) {
-  // We know that the icon+link to update is the immediate sibling of the link.
+  // We know that the icon+link is the immediate sibling of the link:
   var icon_link = link.nextSibling;
   // update the original link, and additionally set the title if not already set:
   link.href = newurl;
@@ -50,6 +38,10 @@ function behaviourUpdateOriginalLink(link, newurl) {
 
 var customBehaviour = behaviourUpdateOriginalLink;
 
+// The main worker function; takes the dictionary of supported
+// services as argument, then finds all URLs that fit into them and
+// expands each one.  How the expansion is presented is handled by the
+// behaviours, above.
 function convertLinks(services) {
   var untinyIconURL = chrome.extension.getURL('icons/untiny-16x16.png');
 
@@ -98,17 +90,23 @@ function convertLinks(services) {
 
 // This might later be invoked with a dictionary of settings, but for now it's
 // just the behaviour to use which is of interest:
-function applySettings(behaviourName) {
-  if (behaviourName)
+function applySettingsAndRun(behaviourName) {
+  if (behaviourName) {
     customBehaviour = window[behaviourName];
+  }
+  // Now, check that the current page is not excluded in the settings,
+  // then expand the links:
   chrome.extension.sendRequest({'action':'checkIfFiltered',
                                 'url'   : window.location.href},
     function(isFiltered) {
-      if (!isFiltered)
+      if (!isFiltered) {
         chrome.extension.sendRequest({'action':'getSupportedServices'},
                                      convertLinks);
+
+      }
     }
   );
 }
 
-chrome.extension.sendRequest({'action': 'getSettings'}, applySettings);
+// Retrieve settings from the background page, and go:
+chrome.extension.sendRequest({'action': 'getSettings'}, applySettingsAndRun);

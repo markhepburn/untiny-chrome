@@ -25,10 +25,10 @@ restrictions.  Unfortunately, one of those restrictions is on making
 cross-site AJAX requests, which untiny of course relies on.
 
 This extension then is a port of that modified greasemonkey script to
-a Chrome extension, which circumvents that restriction.  There are
-also plans to add a few features, such as the option to choose between
-the current behaviour of inserting a link next to the original text,
-and replacing the original link with the expanded text.
+a Chrome extension, which circumvents that restriction.  It also adds
+a few tweaks, such as the option to choose between URL update
+behaviours like inserting a link next to the original text, or
+replacing the original link with the expanded URL.
 
 TODO
 ====
@@ -36,8 +36,10 @@ TODO
  * [DONE] Filter pages the script runs on (for example, skip bit.ly itself).
    The docs imply that this can't be done in the extension manifest,
    which seems a bit odd.
- * Add alternative behaviour to replace the original text.
+ * [DONE] Add alternative behaviour to replace the original text.
  * [DONE] Add a preferences page, with (at least) options to select the
    replacement behaviour, and specify the list of pages to ignore.
    Hopefully this can be accessed from the extensions page, since I
    don't want to add a browser_action icon (unnecessary clutter).
+ * Style the options page up
+   * Upload!
