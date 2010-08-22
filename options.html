@@ -2,19 +2,42 @@
   <head>
     <title>Untiny Options</title>
     <script type="text/javascript">
+      var behaviours;
+      var behavioursLength;
+
       function initOptions() {
+        behaviours = document.behaviours.behaviour;
+        behavioursLength = behaviours.length;
+
         var savedREs = localStorage['filters'] || '';
         // REs are saved as a space-separated string; turn into new-line separated:
         savedREs = savedREs.split(' ');
         savedREs = savedREs.join('\n');
         var reLst = document.getElementById('optionsRegexps');
         reLst.value = savedREs;
+
+        var behaviour = localStorage['behaviour'];
+        if (behaviour) {
+          for (var i = 0; i < behavioursLength; i++) {
+            if (behaviours[i].value === behaviour) {
+              behaviours[i].checked = true;
+              break;
+            }
+          }
+        }
       }
 
       function saveOptions() {
         var reLstElt = document.getElementById('optionsRegexps');
         var reLst = reLstElt.value;
         localStorage['filters'] = reLst.replace(/\s+/g, ' ');
+
+        for (var i = 0; i < behavioursLength; i++) {
+          if (behaviours[i].checked) {
+            localStorage['behaviour'] = behaviours[i].value;
+            break;
+          }
+        }
       }
     </script>
   </head>
@@ -22,7 +45,13 @@
     <h1>Untiny Options</h1>
 
     <span>Filter Regular Expressions:</span>
-    <textarea id="optionsRegexps" rows="10" cols="80"></textarea>
+    <textarea id="optionsRegexps" rows="10" cols="80"></textarea><br>
+
+    <form name="behaviours">
+      <input id="b1" type="radio" name="behaviour" value="behaviourUpdateOriginalLink" checked="checked"><label for="b1">Update the original link and remove the icon when finished</label><br>
+      <input id="b2" type="radio" name="behaviour" value="behaviourUpdateIcon" ><label for="b2">Leave the icon in place when finished, and update with the expanded URL.</label><br>
+    </form>
+
     <button type="Button" onclick="saveOptions()">Save</button>
   </body>
 </html>
