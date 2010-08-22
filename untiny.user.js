@@ -24,10 +24,22 @@
 // support for JSON parsing instead of calling eval() (avoiding a
 // security risk).
 
+// Behaviours: what happens when the url has been expanded (for now we always
+// begin by inserting an icon after the link we are expanding).  Each behaviour
+// implementation should take the original link and the new URL.
+
+function behaviourUpdateIcon(link, newurl) {
+  // We know that the icon+link to update is the immediate sibling of the link.
+  var icon_link = link.nextSibling;
+  var icon = icon_link.firstChild;
+  icon.setAttribute('title', newurl);
+  icon_link.href = newurl;
+}
+
 function convertLinks(services) {
   var untinyIconURL = chrome.extension.getURL('icons/untiny-16x16.png');
 
-  links = document.evaluate(
+  var links = document.evaluate(
     '//a[@href]',
     document,
     null,
@@ -59,14 +71,13 @@ function convertLinks(services) {
       // just updates the icon+link.  Note need to wrap in another closure,
       // because the call-back otherwise closes over the reference, not the
       // reference value.
-      (function(icon_link, icon) {
+      (function(link) {
          chrome.extension.sendRequest({'action':'untinyURL',
                                        'old_url': link.href},
            function(newurl) {
-             icon.setAttribute('title', newurl);
-             icon_link.href = newurl;
+             behaviourUpdateIcon(link, newurl);
            });
-       })(icon_link, icon);
+       })(link);
     }
   }
 }
