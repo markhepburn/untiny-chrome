@@ -48,6 +48,8 @@ function behaviourUpdateOriginalLink(link, newurl) {
   icon_link.parentNode.removeChild(icon_link);
 }
 
+var customBehaviour = behaviourUpdateOriginalLink;
+
 function convertLinks(services) {
   var untinyIconURL = chrome.extension.getURL('icons/untiny-16x16.png');
 
@@ -87,7 +89,7 @@ function convertLinks(services) {
          chrome.extension.sendRequest({'action':'untinyURL',
                                        'old_url': link.href},
            function(newurl) {
-             behaviourUpdateIcon(link, newurl);
+             customBehaviour(link, newurl);
            });
        })(link);
     }
