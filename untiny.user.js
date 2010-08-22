@@ -96,15 +96,19 @@ function convertLinks(services) {
   }
 }
 
+// This might later be invoked with a dictionary of settings, but for now it's
+// just the behaviour to use which is of interest:
+function applySettings(behaviourName) {
+  if (behaviourName)
+    customBehaviour = window[behaviourName];
+  chrome.extension.sendRequest({'action':'checkIfFiltered',
+                                'url'   : window.location.href},
+    function(isFiltered) {
+      if (!isFiltered)
+        chrome.extension.sendRequest({'action':'getSupportedServices'},
+                                     convertLinks);
+    }
+  );
+}
 
-// Kick everything off; delegate to the background html to first check if
-// the current page is ignored, and if not get the list of supported
-// services; convertLinks is the callback which expands all supported urls:
-chrome.extension.sendRequest({'action':'checkIfFiltered',
-                              'url'   : window.location.href},
-  function(isFiltered) {
-    if (!isFiltered)
-      chrome.extension.sendRequest({'action':'getSupportedServices'},
-                                   convertLinks);
-  }
-);
+chrome.extension.sendRequest({'action': 'getSettings'}, applySettings);

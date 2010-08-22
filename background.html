@@ -9,6 +9,14 @@
       var services;
 
       /**
+       * Invoke the callback with the relevant settings.
+       * @param callback Invoked with a single argument.
+       */
+      function getSettings(callback) {
+        callback(localStorage['behaviour']);
+      }
+
+      /**
        * Check if the given url is filtered (should be ignored) or
        * not. Callback is invoked with a boolean, which is true if it
        * _should_ be ignored.
@@ -84,7 +92,10 @@
        * @param callback Function The method to call when the request completes.
        */
       function onRequest(request, sender, callback) {
-        if (request.action === 'checkIfFiltered') {
+        if (request.action === 'getSettings') {
+          getSettings(callback);
+        }
+        else if (request.action === 'checkIfFiltered') {
           checkIfFiltered(request.url, callback);
         }
         else if (request.action == 'getSupportedServices') {
