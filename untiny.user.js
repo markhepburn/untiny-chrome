@@ -36,6 +36,18 @@ function behaviourUpdateIcon(link, newurl) {
   icon_link.href = newurl;
 }
 
+function behaviourUpdateOriginalLink(link, newurl) {
+  // We know that the icon+link to update is the immediate sibling of the link.
+  var icon_link = link.nextSibling;
+  // update the original link, and additionally set the title if not already set:
+  link.href = newurl;
+  if (!link.getAttribute('title')) {
+    link.setAttribute('title', newurl);
+  }
+  // remove the icon from the DOM:
+  icon_link.parentNode.removeChild(icon_link);
+}
+
 function convertLinks(services) {
   var untinyIconURL = chrome.extension.getURL('icons/untiny-16x16.png');
 
