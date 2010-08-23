@@ -41,5 +41,7 @@ TODO
    replacement behaviour, and specify the list of pages to ignore.
    Hopefully this can be accessed from the extensions page, since I
    don't want to add a browser_action icon (unnecessary clutter).
+ * Error handing: only replace the url if it was correctly expanded
+   (the greasemonkey script needs this too)
  * Style the options page up
    * Upload!
